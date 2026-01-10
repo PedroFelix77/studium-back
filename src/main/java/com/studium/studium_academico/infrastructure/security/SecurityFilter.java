@@ -33,7 +33,8 @@ public class SecurityFilter extends OncePerRequestFilter {
             "/auth/activate",
             "/auth/resend",
             "/auth/forgot-password",
-            "/auth/reset-password"
+            "/auth/reset-password",
+            "/api/admin"
     );
 
     @Override
