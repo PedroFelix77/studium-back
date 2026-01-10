@@ -1,0 +1,25 @@
+# render.yaml
+services:
+  - type: web
+    name: studium-backend
+    env: docker
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: DB_URL
+        fromDatabase:
+          name: studium-db
+          property: connectionString
+      - key: DB_USER
+        value: postgres  # Ajuste conforme seu usuário
+      - key: DB_PASSWORD
+        sync: false
+    healthCheckPath: /api/actuator/health
+    autoDeploy: true
+
+databases:
+  - name: studium-db
+    databaseName: studium_db
+    user: postgres
+    plan: free

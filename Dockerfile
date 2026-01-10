@@ -1,37 +1,32 @@
-# =========================
-# STAGE 1 - BUILD
-# =========================
-FROM eclipse-temurin:21-jdk AS build
+# Dockerfile
+FROM eclipse-temurin:21-jdk-alpine AS builder
 
 WORKDIR /app
 
-# Copia arquivos do Maven primeiro (cache)
-COPY pom.xml .
+# Copia arquivos de build
 COPY mvnw .
 COPY .mvn .mvn
+COPY pom.xml .
 
-RUN chmod +x mvnw
-RUN ./mvnw dependency:go-offline
+# Torna o mvnw executável e baixa dependências
+RUN chmod +x mvnw && ./mvnw dependency:go-offline -B
 
-# Copia o restante do código
-COPY src src
+# Copia código fonte
+COPY src ./src
 
-# Build do JAR
+# Build da aplicação
 RUN ./mvnw clean package -DskipTests
 
-
-# =========================
-# STAGE 2 - RUN
-# =========================
-FROM eclipse-temurin:21-jre
+# Imagem de produção
+FROM eclipse-temurin:21-jre-alpine
 
 WORKDIR /app
 
-# Copia o JAR gerado
-COPY --from=build /app/target/studium-academico-0.0.1-SNAPSHOT.jar app.jar
+# Copia o JAR
+COPY --from=builder /app/target/*.jar app.jar
 
-# Porta padrão (Render injeta PORT)
+# Porta (Render usa $PORT)
 EXPOSE 8080
 
-# Start da aplicação
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Comando de inicialização
+ENTRYPOINT ["sh", "-c", "java -jar -Dserver.port=${PORT:-8080} app.jar"]
