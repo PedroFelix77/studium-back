@@ -17,7 +17,8 @@ public class CorsConfig {
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
 
-        config.addAllowedOrigin(frontendUrl);
+        config.addAllowedOriginPattern("https://*.vercel.app");
+        config.addAllowedOriginPattern("http://localhost:5173");
         config.addAllowedMethod("*");
         config.addAllowedHeader("*");
         config.setAllowCredentials(true);
