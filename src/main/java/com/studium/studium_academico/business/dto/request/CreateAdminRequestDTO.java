@@ -15,7 +15,7 @@ public record CreateAdminRequestDTO(
         @NotNull LocalDate birthday,
         @NotBlank String phone,
         @NotBlank String password,
-        @NotNull UUID institutionId,
+        UUID institutionId,
         AddressRequestDTO address,
         LocalDate hireDate
 ) {}
