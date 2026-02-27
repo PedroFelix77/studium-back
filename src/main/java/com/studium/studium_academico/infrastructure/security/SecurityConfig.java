@@ -39,6 +39,7 @@ public class SecurityConfig {
 
                         // ADMIN
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/admin/directors/**").hasRole("ADMIN")
 
                         // DIRECTOR
                         .requestMatchers("/api/director/**").hasRole("DIRECTOR")
